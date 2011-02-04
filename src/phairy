@@ -11,6 +11,8 @@ if [[ "" != $1 ]]; then
 fi
 
 echo "Available tasks:\n"
+echo "    new <photo bucket name, can freely contain spaces>"
+echo "        Creates new photo bucket"
 echo "    tag <path/to/photo/or/dir>"
 echo "        Adds tag to specified photo/dir"
 echo "    help"

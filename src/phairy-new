@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if [[ "" == $@ ]]; then
+    echo "Usage:"
+    echo "    phairy new <photo bucket name, can freely contain spaces>"
+    echo ""
+    echo "Example:"
+    echo "    phairy new 2011-02-04 Olly, 7m"
+    echo ""
+    exit 1;
+fi
+
+BUCKET=`echo "$@" | sed -e "s/[ ]/_/g"`
+
+echo "Initializing"
+
+mkdir -p -v "$BUCKET/orig"
+
+echo "Done."
