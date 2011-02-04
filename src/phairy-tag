@@ -1,0 +1,35 @@
+#!/bin/sh
+
+if [[ "" == $@ ]]; then
+    echo "Usage:"
+    echo "    phairy tag <path/to/photo/or/dir>"
+    echo ""
+    echo "Examples:"
+    echo "    phairy tag orig/DSC_0001.png"
+    echo "    phairy tag ."
+    echo ""
+    exit 1
+fi
+
+for FILE in "$@"; do
+    if [[ -d $FILE ]]; then
+        TAG_FILE="$FILE/.tags"
+    else
+        FILENAME=`basename "$FILE"`
+        FILEDIR=`dirname "$FILE"`
+        FILEDIRDIR=`dirname "$FILEDIR"`
+
+        TAG_DIR="$FILEDIRDIR/tags"
+        TAG_FILE="$TAG_DIR/$FILENAME.tags"
+        mkdir -p -v "$TAG_DIR"
+    fi
+
+    ${EDITOR:-vi} "$TAG_FILE"
+    
+    if [[ -e $TAG_FILE ]]; then
+        TAGS=`cat "$TAG_FILE"`
+        echo "$FILE Tags: $TAGS"
+    else
+        echo "$FILE No tags."
+    fi
+done

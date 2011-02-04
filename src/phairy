@@ -1,53 +1,18 @@
 #!/bin/sh
 
-__SELF__=`basename "$0"`
-TASK=$1
+if [[ "" != $1 ]]; then
+	PHAIRY_PATH=${PHAIRY_PATH:-`dirname $0`}
+	TASK="$PHAIRY_PATH/phairy-$1"
 
-CMD="$__SELF__ $TASK"
+	if [[ -x $TASK ]]; then
+		$TASK ${@:2}
+		exit
+	fi
+fi
 
-case $TASK in
-    tag)
-        if [[ "" == $2 ]]; then
-            echo "Usage:"
-            echo "    $CMD <path/to/photo/or/dir>"
-            echo ""
-            echo "Examples:"
-            echo "    $CMD orig/DSC_0001.png"
-            echo "    $CMD ."
-            echo ""
-            exit 1
-        fi
-        
-        FILES=`echo "$@" | cut -d" " -f2-`
-        for FILE in $FILES; do
-            if [[ -d $FILE ]]; then
-                TAG_FILE="$FILE/.tags"
-            else
-                FILENAME=`basename "$FILE"`
-                FILEDIR=`dirname "$FILE"`
-                FILEDIRDIR=`dirname "$FILEDIR"`
-
-                TAG_DIR="$FILEDIRDIR/tags"
-                TAG_FILE="$TAG_DIR/$FILENAME.tags"
-                mkdir -p -v "$TAG_DIR"
-            fi
-
-            ${EDITOR:-vi} "$TAG_FILE"
-            
-            if [[ -e $TAG_FILE ]]; then
-                TAGS=`cat "$TAG_FILE"`
-                echo "$FILE Tags: $TAGS"
-            else
-                echo "$FILE No tags."
-            fi
-        done
-    ;;
-    
-    *)
-        echo "Available tasks:\n"
-        echo "    tag <path/to/photo/or/dir>"
-        echo "        Adds tag to specified photo/dir"
-        echo "    help"
-        echo "        Print this help message"
-        exit 1
-esac
+echo "Available tasks:\n"
+echo "    tag <path/to/photo/or/dir>"
+echo "        Adds tag to specified photo/dir"
+echo "    help"
+echo "        Print this help message"
+exit 1
