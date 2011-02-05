@@ -10,10 +10,16 @@ if [[ "" == $@ ]]; then
     exit 1;
 fi
 
-BUCKET=`echo "$@" | sed -e "s/ /_/g"`
+BUCKET="${@/ /_}/orig"
 
 echo "Initializing"
 
-mkdir -p -v "$BUCKET/orig"
+mkdir -p -v "$BUCKET"
+
+OPEN=`which open`
+
+if [[ -x $OPEN ]]; then
+	$OPEN "$BUCKET"
+fi
 
 echo "Done."
