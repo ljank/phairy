@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=0.1.1-SNAPSHOT
+VERSION=0.1.2-SNAPSHOT
 
 echo "phairy v±$VERSION"
 
@@ -21,6 +21,8 @@ echo "    tag <path/to/photo/or/dir>"
 echo "        Adds tag to specified photo/directory."
 echo "    export [PHAIRY_ORIG=\"./orig\" [PHAIRY_EXPORTS_PNG=\"./exports_png\"]]"
 echo "        Exports original file(s) to png(s). Preserves tree structure."
+echo "    thumb <export/from> [PHAIRY_EXPORT_THUMBS_TO=\"./thumbs_600\"]"
+echo "        Creates thumbnail version(s) of exported photos from specified directory."
 echo "    help or mistype"
 echo "        Print this help message."
 exit 1

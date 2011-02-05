@@ -17,9 +17,8 @@ for FILE in "$@"; do
     else
         FILENAME=`basename "$FILE"`
         FILEDIR=`dirname "$FILE"`
-        FILEDIRDIR=`dirname "$FILEDIR"`
 
-        TAG_DIR="$FILEDIRDIR/.tags"
+        TAG_DIR="$FILEDIR/.tags"
         TAG_FILE="$TAG_DIR/$FILENAME.tags"
         mkdir -p -v "$TAG_DIR"
     fi
