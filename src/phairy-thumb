@@ -1,0 +1,63 @@
+#!/bin/sh
+
+PHAIRY_THUMB_SIZE=${PHAIRY_THUMB_SIZE:-600}
+PHAIRY_THUMB_QUALITY=${PHAIRY_THUMB_QUALITY:-90}
+
+if [[ "" == $1 ]]; then
+    HELPER=`basename "$0"`
+    echo "Usage:"
+    echo "    $HELPER <export/from> " \
+            "[PHAIRY_EXPORT_THUMBS_TO=\"./thumbs_$PHAIRY_THUMB_SIZE\"]"
+    echo ""
+    echo "Examples:"
+    echo "    $HELPER ."
+    echo "    $HELPER . my_thumbs"
+    echo "    $HELPER exports_png"
+    echo "    $HELPER exports_png ~/Public/my_thumbs"
+    echo ""
+    exit 1
+fi
+
+PHAIRY_EXPORT_THUMBS_FROM=$1
+PHAIRY_EXPORT_THUMBS_TO=${PHAIRY_EXPORT_THUMBS_TO:-${2:-"./thumbs_$PHAIRY_THUMB_SIZE"}}
+
+__SUPPORTED_FORMATS__="jpg png"
+
+if [[ ! -d $PHAIRY_EXPORT_THUMBS_FROM ]]; then
+    echo "$PHAIRY_EXPORT_THUMBS_FROM: No such directory"
+    exit 1
+fi
+
+CONVERT=`which convert`
+
+if [[ ! -x $CONVERT ]]; then
+    echo "Please install ImageMagick (http://www.imagemagick.org/)"
+    exit 2
+fi
+
+mkdir -p -v "$PHAIRY_EXPORT_THUMBS_TO"
+
+echo "Exporting $__SUPPORTED_FORMATS__ from $PHAIRY_EXPORT_THUMBS_FROM" \
+    "to $PHAIRY_EXPORT_THUMBS_TO with max size of ${PHAIRY_THUMB_SIZE}px" \
+    "and $PHAIRY_THUMB_QUALITY% quality\n"
+
+for FORMAT in $__SUPPORTED_FORMATS__; do
+    for FILE in `find "$PHAIRY_EXPORT_THUMBS_FROM" -name "*.$FORMAT"`; do
+        THUMB="$PHAIRY_EXPORT_THUMBS_TO/${FILE/#$PHAIRY_EXPORT_THUMBS_FROM\//}"
+        mkdir -p -v `dirname "$THUMB"`
+
+        printf "$FILE => $THUMB.. "
+
+        $CONVERT -quality $PHAIRY_THUMB_QUALITY \
+                -resize ${PHAIRY_THUMB_SIZE}x${PHAIRY_THUMB_SIZE} \
+                "$FILE" "$THUMB"
+
+        if [[ 0 == $? ]]; then
+            echo "OK"
+        else
+            echo "Failed\n"
+        fi
+    done
+done
+
+echo "Done."

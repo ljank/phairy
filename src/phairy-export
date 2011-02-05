@@ -13,14 +13,14 @@ fi
 
 DCRAW=`which dcraw`
 
-if [[ "" == $DCRAW ]]; then
+if [[ ! -x $DCRAW ]]; then
     echo "Please install dcraw (http://www.cybercom.net/~dcoffin/dcraw/)"
     exit 2
 fi
 
 PNMTOPNG=`which pnmtopng`
 
-if [[ "" == $PNMTOPNG ]]; then
+if [[ ! -x $PNMTOPNG ]]; then
     echo "Please install netpbm (http://netpbm.sourceforge.net/)"
     exit 2
 fi
@@ -37,7 +37,7 @@ for FORMAT in $__SUPPORTED_FORMATS__; do
         case $FORMAT in
             $__FORMAT_NEF__)
                 printf "$FILE => $PNG.. "
-                $DCRAW -c -w "$FILE" | $PNMTOPNG > "$PHAIRY_EXPORTS_PNG/$FILENAME.png"
+                $DCRAW -c -w "$FILE" | $PNMTOPNG > "$PNG"
 
                 if [[ 0 == $? ]]; then
                     echo "OK"
