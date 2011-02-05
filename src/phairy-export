@@ -1,0 +1,52 @@
+#!/bin/sh
+
+PHAIRY_ORIG=${PHAIRY_ORIG:-${1:-"./orig"}}
+PHAIRY_EXPORTS_PNG=${PHAIRY_EXPORTS_PNG:-${2:-"./exports_png"}}
+
+__FORMAT_NEF__="NEF"
+__SUPPORTED_FORMATS__="$__FORMAT_NEF__"
+
+if [[ ! -d $PHAIRY_ORIG ]]; then
+    echo "$PHAIRY_ORIG: No such directory"
+    exit 1
+fi
+
+DCRAW=`which dcraw`
+
+if [[ "" == $DCRAW ]]; then
+    echo "Please install dcraw (http://www.cybercom.net/~dcoffin/dcraw/)"
+    exit 2
+fi
+
+PNMTOPNG=`which pnmtopng`
+
+if [[ "" == $PNMTOPNG ]]; then
+    echo "Please install netpbm (http://netpbm.sourceforge.net/)"
+    exit 2
+fi
+
+mkdir -p -v "$PHAIRY_EXPORTS_PNG"
+
+echo "Exporting $__SUPPORTED_FORMATS__ from $PHAIRY_ORIG to $PHAIRY_EXPORTS_PNG\n"
+
+for FORMAT in $__SUPPORTED_FORMATS__; do
+    for FILE in `find "$PHAIRY_ORIG" -name "*.$FORMAT"`; do
+        PNG="$PHAIRY_EXPORTS_PNG/${FILE/#$PHAIRY_ORIG\//}.png"
+        mkdir -p -v `dirname "$PNG"`
+
+        case $FORMAT in
+            $__FORMAT_NEF__)
+                printf "$FILE => $PNG.. "
+                $DCRAW -c -w "$FILE" | $PNMTOPNG > "$PHAIRY_EXPORTS_PNG/$FILENAME.png"
+
+                if [[ 0 == $? ]]; then
+                    echo "OK"
+                else
+                    echo "Failed\n"
+                fi
+                ;;
+        esac
+    done
+done
+
+echo "Done."

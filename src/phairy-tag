@@ -19,7 +19,7 @@ for FILE in "$@"; do
         FILEDIR=`dirname "$FILE"`
         FILEDIRDIR=`dirname "$FILEDIR"`
 
-        TAG_DIR="$FILEDIRDIR/tags"
+        TAG_DIR="$FILEDIRDIR/.tags"
         TAG_FILE="$TAG_DIR/$FILENAME.tags"
         mkdir -p -v "$TAG_DIR"
     fi
@@ -33,3 +33,5 @@ for FILE in "$@"; do
         echo "$FILE No tags."
     fi
 done
+
+echo "Done."

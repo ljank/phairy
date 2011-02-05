@@ -1,8 +1,12 @@
 #!/bin/sh
 
+VERSION=0.1.1-SNAPSHOT
+
+echo "phairy v±$VERSION"
+
 if [[ "" != $1 ]]; then
-	PHAIRY_PATH=${PHAIRY_PATH:-`dirname $0`}
-	TASK="$PHAIRY_PATH/phairy-$1"
+	PHAIRY_HOME=${PHAIRY_HOME:-`dirname $0`}
+	TASK="$PHAIRY_HOME/phairy-$1"
 
 	if [[ -x $TASK ]]; then
 		$TASK ${@:2}
@@ -12,9 +16,11 @@ fi
 
 echo "Available tasks:\n"
 echo "    new <photo bucket name, can freely contain spaces>"
-echo "        Creates new photo bucket"
+echo "        Creates new phairy photo bucket."
 echo "    tag <path/to/photo/or/dir>"
-echo "        Adds tag to specified photo/dir"
-echo "    help"
-echo "        Print this help message"
+echo "        Adds tag to specified photo/directory."
+echo "    export [PHAIRY_ORIG=\"./orig\" [PHAIRY_EXPORTS_PNG=\"./exports_png\"]]"
+echo "        Exports original file(s) to png(s). Preserves tree structure."
+echo "    help or mistype"
+echo "        Print this help message."
 exit 1
