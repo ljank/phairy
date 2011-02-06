@@ -1,17 +1,17 @@
 #!/bin/sh
 
-VERSION=0.1.2-SNAPSHOT
+VERSION=0.1.3-SNAPSHOT
 
 echo "phairy v±$VERSION"
 
 if [[ "" != $1 ]]; then
-	PHAIRY_HOME=${PHAIRY_HOME:-`dirname $0`}
-	TASK="$PHAIRY_HOME/phairy-$1"
+    PHAIRY_HOME=${PHAIRY_HOME:-`dirname $0`}
+    TASK="$PHAIRY_HOME/phairy-$1"
 
-	if [[ -x $TASK ]]; then
-		$TASK ${@:2}
-		exit
-	fi
+    if [[ -x $TASK ]]; then
+        $TASK ${@:2}
+        exit
+    fi
 fi
 
 echo "Available tasks:\n"
@@ -23,6 +23,8 @@ echo "    export [PHAIRY_ORIG=\"./orig\" [PHAIRY_EXPORTS_PNG=\"./exports_png\"]]
 echo "        Exports original file(s) to png(s). Preserves tree structure."
 echo "    thumb <export/from> [PHAIRY_EXPORT_THUMBS_TO=\"./thumbs_600\"]"
 echo "        Creates thumbnail version(s) of exported photos from specified directory."
+echo "    sync <to>"
+echo "        (R)Syncs current photo bucket to specified destination."
 echo "    help or mistype"
 echo "        Print this help message."
 exit 1

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [[ "" -eq $@ ]]; then
+if [[ "" == $@ ]]; then
     echo "Usage:"
     echo "    phairy tag <path/to/photo/or/dir>"
     echo ""
