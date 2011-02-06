@@ -23,8 +23,9 @@ Workflow
 ========
 
 - ``phairy new 2011-02-06 Same shit, different day``
-    - after initialization will try to auto-open directory with preferred 
-    file navigator
+    - after initialization, ``phairy`` will try to auto-open directory with
+    preferred file navigator
+    - import your photos as usually
 - ``cd`` to newly created photo bucket
 - Optionally add some tags with ``phairy tag .`` (to tag whole bucket)
 - Optionally add some photo tags with ``phairy tag orig/DSC_0001.NEF``
