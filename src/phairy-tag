@@ -16,16 +16,8 @@ for FILE in "$@"; do
         TAG_FILE="$FILE/.tags"
     else
         FILENAME=`basename "$FILE"`
-        FILEDIR=`dirname "$FILE"`
-
-        TAG_DIR="$FILEDIR/.tags"
-        TAG_FILE="$TAG_DIR/$FILENAME.tags"
-
-        mkdir -p -v "$TAG_DIR"
-        if [[ 0 -ne $? ]]; then
-            echo "Failed to create tags directory."
-            exit 3
-        fi
+        FILE_DIR=`dirname "$FILE"`
+        TAG_FILE="$FILE_DIR/.$FILENAME.tags"
     fi
 
     ${EDITOR:-vi} "$TAG_FILE"
