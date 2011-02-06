@@ -1,0 +1,33 @@
+#!/bin/sh
+
+if [[ "" == $1 ]]; then
+    echo "Usage:"
+    echo "    phairy sync <to>"
+    echo ""
+    echo "Examples:"
+    echo "    phairy sync /path/to/backup"
+    echo "    phairy sync rsync://my.backups"
+    exit 1
+fi
+
+BUCKET=$PWD
+DESTINATION=$1
+
+while [[ ! -e "$BUCKET/.phairy-bucket" && "/" != "$BUCKET" ]]; do
+	BUCKET=`dirname "$BUCKET"`
+done
+
+if [[ "/" == "$BUCKET" ]]; then
+	echo "Please go to the photo bucket you want to sync."
+	exit 5
+fi
+
+RSYNC=`which rsync`
+if [[ ! -x $RSYNC ]]; then
+	echo "Please install rsync (http://samba.anu.edu.au/rsync/)"
+	exit 4
+fi
+
+$RSYNC -av $BUCKET $DESTINATION
+
+echo "Done."

@@ -3,50 +3,48 @@
 PHAIRY_ORIG=${PHAIRY_ORIG:-${1:-"./orig"}}
 PHAIRY_EXPORTS_PNG=${PHAIRY_EXPORTS_PNG:-${2:-"./exports_png"}}
 
-__FORMAT_NEF__="NEF"
-__SUPPORTED_FORMATS__="$__FORMAT_NEF__"
-
 if [[ ! -d $PHAIRY_ORIG ]]; then
     echo "$PHAIRY_ORIG: No such directory"
-    exit 1
+    exit 2
 fi
 
 DCRAW=`which dcraw`
-
 if [[ ! -x $DCRAW ]]; then
     echo "Please install dcraw (http://www.cybercom.net/~dcoffin/dcraw/)"
-    exit 2
+    exit 4
 fi
 
 PNMTOPNG=`which pnmtopng`
-
 if [[ ! -x $PNMTOPNG ]]; then
     echo "Please install netpbm (http://netpbm.sourceforge.net/)"
-    exit 2
+    exit 4
 fi
 
 mkdir -p -v "$PHAIRY_EXPORTS_PNG"
+if [[ 0 -ne $? ]]; then
+    echo "Failed to create exports directory."
+    exit 3
+fi
 
-echo "Exporting $__SUPPORTED_FORMATS__ from $PHAIRY_ORIG to $PHAIRY_EXPORTS_PNG\n"
+echo "Exporting *.NEF from $PHAIRY_ORIG to $PHAIRY_EXPORTS_PNG\n"
 
-for FORMAT in $__SUPPORTED_FORMATS__; do
-    for FILE in `find "$PHAIRY_ORIG" -name "*.$FORMAT"`; do
-        PNG="$PHAIRY_EXPORTS_PNG/${FILE/#$PHAIRY_ORIG\//}.png"
-        mkdir -p -v `dirname "$PNG"`
+for FILE in `find "$PHAIRY_ORIG" -name "*.NEF"`; do
+    PNG="$PHAIRY_EXPORTS_PNG/${FILE/#$PHAIRY_ORIG\//}.png"
 
-        case $FORMAT in
-            $__FORMAT_NEF__)
-                printf "$FILE => $PNG.. "
-                $DCRAW -c -w "$FILE" | $PNMTOPNG > "$PNG"
+    mkdir -p -v `dirname "$PNG"`
+    if [[ 0 -ne $? ]]; then
+        echo "Failed to create exports subdirectory."
+        exit 3
+    fi
 
-                if [[ 0 == $? ]]; then
-                    echo "OK"
-                else
-                    echo "Failed\n"
-                fi
-                ;;
-        esac
-    done
+    printf "$FILE => $PNG.. "
+
+    $DCRAW -c -w "$FILE" | $PNMTOPNG > "$PNG"
+    if [[ 0 -ne $? ]]; then
+        echo "OK"
+    else
+        echo "Failed\n"
+    fi
 done
 
 echo "Done."

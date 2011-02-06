@@ -10,16 +10,26 @@ if [[ "" == $@ ]]; then
     exit 1;
 fi
 
-BUCKET="${@/ /_}/orig"
+BUCKET=${@/ /_}
+PHAIRY_ORIG=${PHAIRY_ORIG:-orig}
 
 echo "Initializing"
 
-mkdir -p -v "$BUCKET"
+mkdir -p -v "$BUCKET/$PHAIRY_ORIG"
+if [[ 0 -ne $? ]]; then
+	echo "Failed to initialize new photo bucket."
+	exit 3
+fi
+
+touch "$BUCKET/.phairy-bucket"
+if [[ 0 -ne $? ]]; then
+	echo "Failed to initialize new photo bucket."
+	exit 3
+fi
 
 OPEN=`which open`
-
 if [[ -x $OPEN ]]; then
-	$OPEN "$BUCKET"
+	$OPEN "$BUCKET/$PHAIRY_ORIG"
 fi
 
 echo "Done."

@@ -20,11 +20,16 @@ for FILE in "$@"; do
 
         TAG_DIR="$FILEDIR/.tags"
         TAG_FILE="$TAG_DIR/$FILENAME.tags"
+
         mkdir -p -v "$TAG_DIR"
+        if [[ 0 -ne $? ]]; then
+            echo "Failed to create tags directory."
+            exit 3
+        fi
     fi
 
     ${EDITOR:-vi} "$TAG_FILE"
-    
+
     if [[ -e $TAG_FILE ]]; then
         TAGS=`cat "$TAG_FILE"`
         echo "$FILE Tags: $TAGS"
