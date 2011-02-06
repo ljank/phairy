@@ -25,17 +25,21 @@ __SUPPORTED_FORMATS__="jpg png"
 
 if [[ ! -d $PHAIRY_EXPORT_THUMBS_FROM ]]; then
     echo "$PHAIRY_EXPORT_THUMBS_FROM: No such directory"
-    exit 1
+    exit 2
 fi
 
 CONVERT=`which convert`
 
 if [[ ! -x $CONVERT ]]; then
     echo "Please install ImageMagick (http://www.imagemagick.org/)"
-    exit 2
+    exit 4
 fi
 
 mkdir -p -v "$PHAIRY_EXPORT_THUMBS_TO"
+if [[ 0 -ne $? ]]; then
+    echo "Failed to create thumb directory."
+    exit 3
+fi
 
 echo "Exporting $__SUPPORTED_FORMATS__ from $PHAIRY_EXPORT_THUMBS_FROM" \
     "to $PHAIRY_EXPORT_THUMBS_TO with max size of ${PHAIRY_THUMB_SIZE}px" \
@@ -44,7 +48,12 @@ echo "Exporting $__SUPPORTED_FORMATS__ from $PHAIRY_EXPORT_THUMBS_FROM" \
 for FORMAT in $__SUPPORTED_FORMATS__; do
     for FILE in `find "$PHAIRY_EXPORT_THUMBS_FROM" -name "*.$FORMAT"`; do
         THUMB="$PHAIRY_EXPORT_THUMBS_TO/${FILE/#$PHAIRY_EXPORT_THUMBS_FROM\//}"
+
         mkdir -p -v `dirname "$THUMB"`
+        if [[ 0 -ne $? ]]; then
+            echo "Failed to create thumb subdirectory."
+            exit 3
+        fi
 
         printf "$FILE => $THUMB.. "
 
@@ -52,7 +61,7 @@ for FORMAT in $__SUPPORTED_FORMATS__; do
                 -resize ${PHAIRY_THUMB_SIZE}x${PHAIRY_THUMB_SIZE} \
                 "$FILE" "$THUMB"
 
-        if [[ 0 == $? ]]; then
+        if [[ 0 -ne $? ]]; then
             echo "OK"
         else
             echo "Failed\n"
