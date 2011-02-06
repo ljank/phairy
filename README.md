@@ -5,6 +5,20 @@ What is ``phairy``?
 export raw photos (currently only [NEF](http://nikonimglib.com/nefcodec/ "")s),
 generate thumbnails and backup your precious photos.
 
+Some facts about ``phairy``
+---------------------------
+
+- ``phairy`` has been built keeping simplicity in mind,
+- ``phairy`` was born out of my own necessity (needed something super-simple),
+- ``phairy`` consists only of some simple shell scripts (trying to master sh/bash)
+    and so it runs on any Linux/UNIX (MacOSX, too) machine.
+
+Installation
+============
+
+Simply run ``install.sh`` to install ``phairy`` scripts to your local ``~/bin`` or
+``sudo install.sh /usr/local/bin`` to install ``phairy`` somewhere globally.
+
 Workflow
 ========
 
