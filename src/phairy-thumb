@@ -4,16 +4,15 @@ PHAIRY_THUMB_SIZE=${PHAIRY_THUMB_SIZE:-600}
 PHAIRY_THUMB_QUALITY=${PHAIRY_THUMB_QUALITY:-90}
 
 if [[ "" == $1 ]]; then
-    HELPER=`basename "$0"`
     echo "Usage:"
-    echo "    $HELPER <export/from> " \
+    echo "    phairy thumb <export/from> " \
             "[PHAIRY_EXPORT_THUMBS_TO=\"./thumbs_$PHAIRY_THUMB_SIZE\"]"
     echo ""
     echo "Examples:"
-    echo "    $HELPER ."
-    echo "    $HELPER . my_thumbs"
-    echo "    $HELPER exports_png"
-    echo "    $HELPER exports_png ~/Public/my_thumbs"
+    echo "    phairy thumb ."
+    echo "    phairy thumb . my_thumbs"
+    echo "    phairy thumb exports_png"
+    echo "    phairy thumb exports_png ~/Public/my_thumbs"
     echo ""
     exit 1
 fi
